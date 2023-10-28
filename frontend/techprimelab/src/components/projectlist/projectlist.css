@@ -1,0 +1,66 @@
+.projectListing {
+  position: absolute;
+  top: 44px;
+  color: #ffffff;
+}
+.align-header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.align-header .d-flex {
+  display: flex;
+  align-items: baseline;
+}
+
+.align-header fieldset {
+  border: unset;
+}
+
+.main-container-list {
+  background: #ffffff;
+  border-radius: 10px;
+  position: absolute;
+  top: 120px;
+  width: 88%;
+  position: absolute;
+  left: 110px;
+  padding-inline: 24px;
+}
+
+th {
+  background-color: #0877e43d !important;
+}
+
+.w-90-px {
+  width: 90px;
+}
+
+.pagination-div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 10px;
+}
+
+.pagination-div .Mui-selected {
+  background-color: aqua !important;
+  font-weight: 700;
+}
+
+.list-conatiner h4 {
+  margin: 0 !important;
+}
+.list-conatiner {
+  margin-top: 14px;
+}
+.align-header .MuiTextField-root {
+  border-bottom: 1px solid gray;
+}
+.align-header-search .MuiSvgIcon-root {
+  padding-top: 7px;
+  color: gray;
+}
+.align-header .MuiInputBase-input {
+  padding: 7px !important;
+}

@@ -1,0 +1,54 @@
+.logo-img {
+  position: absolute;
+  top: 55px;
+  width: 100%;
+  display: block;
+  text-align: center;
+  color: #ffffff;
+}
+
+.w-t-100 {
+  width: calc(100% - 91px);
+  /* transform: translate(55px, 0px); */
+  position: absolute;
+  left: 87px;
+}
+
+.logo-header-img {
+  top: 20px !important;
+}
+ul {
+  
+  height: 100%;
+}
+.side-div {
+  height: 90%;
+  vertical-align: middle;
+  padding: auto;
+  text-align: center;
+  justify-content: left;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.side-div a {
+  padding-inline: 30px;
+}
+
+.side-div .active {
+
+  border-left: 5px solid #1976d2;
+}
+
+.DashBoardText {
+  position: absolute;
+  top: 35px;
+  color: #ffffff;
+  left: 124px;
+}
+
+.hide-side-nav{
+  display: none;
+}

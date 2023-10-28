@@ -1,0 +1,23 @@
+.createProjectContainer {
+  position: absolute;
+  top: 120px;
+  width: 92% !important;
+  left: 100px;
+  padding-inline: 24px;
+}
+
+.btn-save-pro {
+  padding-top: 70px !important;
+  text-align: end;
+}
+
+.status-display {
+  display: flex;
+  align-items: center;
+}
+
+.btn-border .MuiButtonBase-root {
+    border: 1px solid #1976d2;
+    margin: 0;
+    border-radius: 24px !important; 
+}
