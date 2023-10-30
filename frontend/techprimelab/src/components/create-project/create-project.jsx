@@ -20,7 +20,8 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import axios from "axios";
 import dayjs from "dayjs";
 import { useNavigate } from "react-router-dom";
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import Loader from "../loader/loader";
 
 function CreateProject() {
   const [projectName, setProjectName] = useState("For Business");
@@ -46,6 +47,10 @@ function CreateProject() {
   const [projectNameError, setProjectNameError] = useState(false);
   const [open, setOpen] = useState(false);
   const [msg, setMsg] = useState("");
+  const [sev, setSev] = useState("error");
+
+  const token = localStorage.getItem("token");
+  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
 
@@ -56,7 +61,7 @@ function CreateProject() {
     } else {
       setProjectNameError(false);
     }
-
+    setLoading(true);
     const req = {
       StartDate: dayjs(startDate).format("MMM-DD, YYYY"),
       EndDate: dayjs(endDate).format("MMM-DD, YYYY"),
@@ -69,25 +74,36 @@ function CreateProject() {
       Location: location,
       ProjectName: projectName,
     };
-    console.log();
+    // console.log();
 
     axios
-      .post("http://localhost:8000/project/save", req)
+      .post("http://localhost:8000/protected/project/save", req, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
       .then((response) => {
         if (response.status === 200) {
-          // resetForm();
+          resetForm();
           console.log("Project data saved successful");
           setDataSaved(true);
           setOpen(true);
-          setMsg("Project data saved successful")
-          navigate("/");  
+          setSev("success");
+          setMsg("Project data saved successfully!!");
+          // navigate("/");
         } else {
           console.log("login failed");
+          setOpen(true);
+          setSev("error");
+          setMsg("Something went wrong");
           setDataSaved(true);
         }
       })
       .catch((err) => {
         console.error(err);
+        setOpen(true);
+        setSev("error");
+        setMsg("Something went wrong");
         setDataSaved(true);
       });
   };
@@ -104,7 +120,11 @@ function CreateProject() {
 
   const getTypeList = () => {
     axios
-      .get("http://localhost:8000/type/typelist")
+      .get("http://localhost:8000/protected/type/typelist", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
       .then((response) => {
         if (response.status === 200) {
           setTypeOptions(response.data);
@@ -114,13 +134,23 @@ function CreateProject() {
         }
       })
       .catch((err) => {
-        console.error(err);
+        if (err?.response?.data?.message) {
+          setMsg(err?.response?.data?.message);
+        } else {
+          setMsg("Something went Wrong!!!");
+        }
+        setOpen(true);
+        setSev("error");
       });
   };
 
   const getDivisionList = () => {
     axios
-      .get("http://localhost:8000/division/divisionlist")
+      .get("http://localhost:8000/protected/division/divisionlist", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
       .then((response) => {
         if (response.status === 200) {
           setDivisionOptions(response.data);
@@ -130,13 +160,23 @@ function CreateProject() {
         }
       })
       .catch((err) => {
-        console.error(err);
+        if (err?.response?.data?.message) {
+          setMsg(err?.response?.data?.message);
+        } else {
+          setMsg("Something went Wrong!!!");
+        }
+        setOpen(true);
+        setSev("error");
       });
   };
 
   const getLocationList = () => {
     axios
-      .get("http://localhost:8000/location/locationlist")
+      .get("http://localhost:8000/protected/location/locationlist", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
       .then((response) => {
         if (response.status === 200) {
           setLocationOptions(response.data);
@@ -146,13 +186,23 @@ function CreateProject() {
         }
       })
       .catch((err) => {
-        console.error(err);
+        if (err?.response?.data?.message) {
+          setMsg(err?.response?.data?.message);
+        } else {
+          setMsg("Something went Wrong!!!");
+        }
+        setOpen(true);
+        setSev("error");
       });
   };
 
   const getReasonList = () => {
     axios
-      .get("http://localhost:8000/reason/reasonlist")
+      .get("http://localhost:8000/protected/reason/reasonlist", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
       .then((response) => {
         if (response.status === 200) {
           setReasonOptions(response.data);
@@ -162,13 +212,23 @@ function CreateProject() {
         }
       })
       .catch((err) => {
-        console.error(err);
+        if (err?.response?.data?.message) {
+          setMsg(err?.response?.data?.message);
+        } else {
+          setMsg("Something went Wrong!!!");
+        }
+        setOpen(true);
+        setSev("error");
       });
   };
 
   const getCategoryList = () => {
     axios
-      .get("http://localhost:8000/category/categorylist")
+      .get("http://localhost:8000/protected/category/categorylist", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
       .then((response) => {
         if (response.status === 200) {
           setCategoryOptions(response.data);
@@ -178,13 +238,23 @@ function CreateProject() {
         }
       })
       .catch((err) => {
-        console.error(err);
+        if (err?.response?.data?.message) {
+          setMsg(err?.response?.data?.message);
+        } else {
+          setMsg("Something went Wrong!!!");
+        }
+        setOpen(true);
+        setSev("error");
       });
   };
 
   const getPriorityList = () => {
     axios
-      .get("http://localhost:8000/priority/priorityList")
+      .get("http://localhost:8000/protected/priority/priorityList", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
       .then((response) => {
         if (response.status === 200) {
           setPriorityOptions(response.data);
@@ -194,13 +264,23 @@ function CreateProject() {
         }
       })
       .catch((err) => {
-        console.error(err);
+        if (err?.response?.data?.message) {
+          setMsg(err?.response?.data?.message);
+        } else {
+          setMsg("Something went Wrong!!!");
+        }
+        setOpen(true);
+        setSev("error");
       });
   };
 
   const getDepartmentList = () => {
     axios
-      .get("http://localhost:8000/dept/deptlist")
+      .get("http://localhost:8000/protected/dept/deptlist", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
       .then((response) => {
         if (response.status === 200) {
           setDepartmentsOptions(response.data);
@@ -210,7 +290,13 @@ function CreateProject() {
         }
       })
       .catch((err) => {
-        console.error(err);
+        if (err?.response?.data?.message) {
+          setMsg(err?.response?.data?.message);
+        } else {
+          setMsg("Something went Wrong!!!");
+        }
+        setOpen(true);
+        setSev("error");
       });
   };
 
@@ -222,7 +308,7 @@ function CreateProject() {
   };
 
   const handleSnackbarClose = (event, reason) => {
-    if (reason === 'clickaway') {
+    if (reason === "clickaway") {
       return;
     }
     setOpen(false);
@@ -244,7 +330,8 @@ function CreateProject() {
                   fullWidth
                   variant="outlined"
                   required
-                  onKeyUp={(e) => setProjectName(e.target.value)}
+                  value={projectName}
+                  onChange={(e) => setProjectName(e.target.value)}
                   error={projectNameError}
                   helperText={projectNameError && "Project Name is required"}
                 />
@@ -366,6 +453,7 @@ function CreateProject() {
                       format="MMM-DD, YYYY"
                       required
                       minDate={startDate}
+                      maxDate={endDate}
                       onChange={(newValue) => setStartDate(newValue)}
                       fullWidth
                     />
@@ -381,6 +469,7 @@ function CreateProject() {
                     <DatePicker
                       value={endDate}
                       format="MMM-DD, YYYY"
+                      minDate={endDate}
                       required
                       onChange={(newValue) => setEndDate(newValue)}
                       fullWidth
@@ -416,18 +505,15 @@ function CreateProject() {
       </Container>
       <Snackbar
         open={open}
-        autoHideDuration={5000} 
+        autoHideDuration={5000}
         onClose={handleSnackbarClose}
         anchorOrigin={{ vertical: "top", horizontal: "right" }}
       >
-        <Alert
-          severity="success"
-          icon={<CheckCircleIcon />}
-          sx={{ width: "100%" }}
-        >
+        <Alert severity={sev} icon={<CheckCircleIcon />} sx={{ width: "100%" }}>
           {msg}
         </Alert>
       </Snackbar>
+      {loading && <Loader />}
     </div>
   );
 }

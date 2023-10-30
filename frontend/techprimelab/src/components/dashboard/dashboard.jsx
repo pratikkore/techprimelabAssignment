@@ -13,15 +13,17 @@ import axios from "axios";
 import { useState } from "react";
 import "./dashboard.css";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-
-import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
+import Loader from "../loader/loader";
 
 function Dashboard() {
   const chartRef = useRef(null);
   const [projectStatusCounts, setProjectStatusCounts] = useState({});
   const [open, setOpen] = useState(false);
   const [msg, setMsg] = useState("");
-  const  [sev,setSev]=useState("error")
+  const [sev, setSev] = useState("error");
+  const token = localStorage.getItem("token");
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     getProjectStatusData();
     getChartsData();
@@ -35,8 +37,13 @@ function Dashboard() {
   };
 
   const getProjectStatusData = () => {
+    console.log(token + "bhd");
     axios
-      .get("http://localhost:8000/project/projectStatusCount")
+      .get("http://localhost:8000/protected/project/projectStatusCount", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
       .then((response) => {
         console.log(response);
         if (response.status === 200) {
@@ -52,15 +59,26 @@ function Dashboard() {
         }
       })
       .catch((err) => {
-        setMsg("Something went Wrong!!!");
+        if (err?.response?.data?.message) {
+          setMsg(err?.response?.data?.message);
+        } else {
+          setMsg("Something went Wrong!!!");
+        }
         setOpen(true);
         setSev("error");
+      })
+      .finally(() => {
+        setLoading(false);
       });
   };
 
   const getChartsData = () => {
     axios
-      .get("http://localhost:8000/project/chart")
+      .get("http://localhost:8000/protected/project/chart", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
       .then((response) => {
         console.log(response);
         if (response.status === 200) {
@@ -121,7 +139,15 @@ function Dashboard() {
           console.log();
         }
       })
-      .catch((err) => {});
+      .catch((err) => {
+        if (err?.response?.data?.message) {
+          setMsg(err?.response?.data?.message);
+        } else {
+          setMsg("Something went Wrong!!!");
+        }
+        setOpen(true);
+        setSev("error");
+      });
   };
 
   return (
@@ -212,7 +238,7 @@ function Dashboard() {
 
         <Snackbar
           open={open}
-          autoHideDuration={3000} 
+          autoHideDuration={3000}
           onClose={handleSnackbarClose}
           anchorOrigin={{ vertical: "top", horizontal: "right" }}
         >
@@ -224,6 +250,8 @@ function Dashboard() {
             {msg}
           </Alert>
         </Snackbar>
+
+        {loading && <Loader />}
       </div>
     </>
   );

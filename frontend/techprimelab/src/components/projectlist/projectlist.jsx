@@ -25,7 +25,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import "./projectlist.css";
 import { useNavigate } from "react-router-dom";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-
+import Loader from "../loader/loader";
 
 function Projectlist() {
   const [data, setData] = useState([]);
@@ -41,6 +41,8 @@ function Projectlist() {
   const [msg, setMsg] = useState("");
   const [sev, setSev] = useState("error");
   const navigate = useNavigate();
+  const token = localStorage.getItem("token");
+  const [loading, setLoading] = useState(true);
 
   const sortingOption = [
     "ProjectName",
@@ -68,13 +70,22 @@ function Projectlist() {
 
   const UpdateProject = (url) => {
     console.log(url);
+    setLoading(true);
     axios
-      .patch("http://localhost:8000/project/updateStatus/" + url)
+      .patch(
+        "http://localhost:8000/protected/project/updateStatus/" + url,
+        null,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
       .then((response) => {
         if (response.status === 200) {
           setStatus(true);
           console.log(response);
-          navigate("/");
+          // navigate("/");
           setOpen(true);
           setMsg("Project Stats updated successfully!!");
           setSev("success");
@@ -85,19 +96,33 @@ function Projectlist() {
         }
       })
       .catch((err) => {
-        setMsg("Something went Wrong!!!");
+        if (err?.response?.data?.message) {
+          setMsg(err?.response?.data?.message);
+        } else {
+          setMsg("Something went Wrong!!!");
+        }
         setOpen(true);
         setSev("error");
-      });
+      })
   };
 
   useEffect(() => {
+    // setLoading(true)
     axios
-      .get("http://localhost:8000/project/projectList?sortField=" + sortingData)
+      .get(
+        "http://localhost:8000/protected/project/projectList?sortField=" +
+          sortingData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
       .then((response) => {
         if (response.status == 200) {
           console.log(response);
           setStatus(false);
+          setLoading(false);
           setOrgData(response.data.data);
           setMsg("Project List Get SuccesFully sorting on " + sortingData);
           setOpen(true);
@@ -115,7 +140,11 @@ function Projectlist() {
         }
       })
       .catch((err) => {
-        setMsg("Something went Wrong!!!");
+        if (err?.response?.data?.message) {
+          setMsg(err?.response?.data?.message);
+        } else {
+          setMsg("Something went Wrong!!!");
+        }
         setOpen(true);
         setSev("error");
       });
@@ -123,9 +152,8 @@ function Projectlist() {
 
   const handleS = (value) => {
     setSearch(value);
-  
 
-    value = value.toLowerCase(); 
+    value = value.toLowerCase();
 
     const result = orgData.filter((item) => {
       return Object.values(item).some((e) => {
@@ -288,6 +316,7 @@ function Projectlist() {
           {msg}
         </Alert>
       </Snackbar>
+      {loading && <Loader duration={100000} />}
     </div>
   );
 }

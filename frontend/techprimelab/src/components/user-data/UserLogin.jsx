@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import SideNavbar from "../side-navbar/side-navbar";
+import { CircularProgress } from "@mui/material";
 import {
   Box,
   Button,
@@ -15,17 +16,26 @@ import "./UserLoginCss.css";
 import "../../index.css";
 import axios from "axios";
 import hidePasswordImg from "../../Images/hide-password.svg";
+import { Visibility } from "@mui/icons-material";
+import Loader from "../loader/loader";
+
 function UserLogin({ onLogin }) {
   const [UserName, setUserName] = useState("");
   const [Password, setPassword] = useState("");
   const [userNameError, setUserNameError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [invalidCredentialsError, setinvalidCredentialsError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
 
+  const togglePasswordVisibility = () => {
+    setShowPassword((prevShowPassword) => !prevShowPassword);
+  };
 
   const onsubmit = () => {
     setUserNameError("");
     setPasswordError("");
+    setLoading(true);
 
     let isValid = true;
     if (!UserName) {
@@ -41,25 +51,22 @@ function UserLogin({ onLogin }) {
       axios
         .post("http://localhost:8000/user/login", { UserName, Password })
         .then((response) => {
-          console.log(response);
           if (response.status === 200) {
-            console.log("login successful");
+            const token = response.data.token;
+            localStorage.setItem("token", token);
             onLogin();
           } else {
             console.log("login failed");
             setinvalidCredentialsError("Invalid credentials");
           }
-          // navigate('/sideNav');
         })
         .catch((err) => {
           console.error(err);
           setinvalidCredentialsError("Invalid credentials");
-
-        
         });
     }
   };
-  
+
   return (
     <div>
       <img src={loginbackimg} className="w-100" alt="backgound img" />
@@ -77,7 +84,6 @@ function UserLogin({ onLogin }) {
                 variant="outlined"
                 required
                 fullWidth
-              
                 onKeyUp={(e) => setUserName(e.target.value)}
                 error={!!userNameError}
                 helperText={userNameError}
@@ -89,15 +95,25 @@ function UserLogin({ onLogin }) {
                 fullWidth
                 variant="outlined"
                 required
+                type={showPassword ? "text" : "password"}
                 onKeyUp={(e) => setPassword(e.target.value)}
                 error={!!passwordError}
                 helperText={passwordError}
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position="end">
-                      <img
-                        src={hidePasswordImg}
-                      />
+                      {!showPassword ? (
+                        <Visibility
+                          className="visibility-eye"
+                          onClick={togglePasswordVisibility}
+                        />
+                      ) : (
+                        <img
+                          className="visibility-eye"
+                          src={hidePasswordImg}
+                          onClick={togglePasswordVisibility}
+                        />
+                      )}
                     </InputAdornment>
                   ),
                 }}

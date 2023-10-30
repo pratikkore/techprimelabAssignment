@@ -31,11 +31,9 @@ import projectListImg from "../../Images/Project-list.svg";
 import logoutImg from "../../Images/Logout.svg";
 
 function SideNavbar({ onLogout }) {
-
   const [createProject, setcreateProject] = useState(false);
   const [dashboardProject, setdashboardProject] = useState(true);
   const [createProjectlist, setProjectlist] = useState(false);
-
 
   const onClickDashboard = () => {
     setdashboardProject(true);
@@ -67,37 +65,35 @@ function SideNavbar({ onLogout }) {
         <List>
           <div className="side-div">
             <ListItem
+              onClick={() => onClickDashboard()}
               button
               component={NavLink}
               className={dashboardProject ? "active" : ""}
               to="/"
             >
-              <img
-                onClick={() => onClickDashboard()}
-                src={dashboardProject ? dashboardActiveImg : dashboardImg}
-              />
+              <img src={dashboardProject ? dashboardActiveImg : dashboardImg} />
             </ListItem>
 
             <ListItem
               className={createProjectlist ? "active" : ""}
+              onClick={onClickProjectList}
               button
               component={NavLink}
               to="/projectlist"
             >
               <img
-                onClick={onClickProjectList}
                 src={createProjectlist ? projectActiveListImg : projectListImg}
               />
             </ListItem>
 
             <ListItem
               button
+              onClick={onClickCreateProject}
               className={createProject ? "active" : ""}
               component={NavLink}
               to="/create-project"
             >
               <img
-                onClick={onClickCreateProject}
                 src={createProject ? createProjectActiveImg : createProjectImg}
               />
             </ListItem>
@@ -109,12 +105,6 @@ function SideNavbar({ onLogout }) {
           </div>
         </List>
       </Drawer>
-
-      {/* <Container>
-        <Routes>
-          
-        </Routes>
-      </Container> */}
     </div>
   );
 }
