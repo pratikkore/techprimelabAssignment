@@ -68,7 +68,10 @@ function Dashboard() {
         setSev("error");
       })
       .finally(() => {
-        setLoading(false);
+        setTimeout(()=>{
+      setLoading(false);
+
+    },2000)
       });
   };
 

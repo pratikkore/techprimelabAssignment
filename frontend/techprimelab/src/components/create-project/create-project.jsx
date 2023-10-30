@@ -24,7 +24,7 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import Loader from "../loader/loader";
 
 function CreateProject() {
-  const [projectName, setProjectName] = useState("For Business");
+  const [projectName, setProjectName] = useState("");
   const [reason, setReason] = useState("For Business");
   const [type, setType] = useState("Internal");
   const [division, setDivision] = useState("Filters");
@@ -305,6 +305,10 @@ function CreateProject() {
     setProjectName("");
     setStartDate(dayjs(new Date()));
     setEndDate(startDate);
+    setTimeout(()=>{
+      setLoading(false);
+
+    },2000)
   };
 
   const handleSnackbarClose = (event, reason) => {

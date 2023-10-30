@@ -122,7 +122,10 @@ function Projectlist() {
         if (response.status == 200) {
           console.log(response);
           setStatus(false);
-          setLoading(false);
+          setTimeout(()=>{
+      setLoading(false);
+
+    },2000)
           setOrgData(response.data.data);
           setMsg("Project List Get SuccesFully sorting on " + sortingData);
           setOpen(true);
@@ -316,7 +319,7 @@ function Projectlist() {
           {msg}
         </Alert>
       </Snackbar>
-      {loading && <Loader duration={100000} />}
+      {loading && <Loader/>}
     </div>
   );
 }
