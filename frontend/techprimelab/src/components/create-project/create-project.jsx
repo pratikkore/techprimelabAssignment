@@ -305,10 +305,9 @@ function CreateProject() {
     setProjectName("");
     setStartDate(dayjs(new Date()));
     setEndDate(startDate);
-    setTimeout(()=>{
+    setTimeout(() => {
       setLoading(false);
-
-    },2000)
+    }, 2000);
   };
 
   const handleSnackbarClose = (event, reason) => {
